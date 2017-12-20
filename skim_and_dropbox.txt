@@ -1,0 +1,13 @@
+皆さま
+
+前回のスカイプ会議ではPDFファイルの再読込とスクロールの操作がいちいち面倒だったと思います。次回のスカイプ会議では以下の方法を試してみてください。ただしPDFファイルの閲覧は、ブラウザでhttps://www.dropbox.com/homeを開くのではなく、ローカルディスクの~/Dropbox内にあるものをSkimで開くことを想定しています。
+
+~/Dropbox内のPDFファイルに対しては、もしそれがリモートマシン上で更新された場合、Skimの自動再読込がうまく機能しません。その原因はDropbox側のファイルバージョン管理方法にあるようです。そこで~/Dropbox内のPDFファイルを直接見るのは諦めて、ファイルをいったん別のディレクトリ（例えば/tmp）にコピーしておき、Skimでは/tmpに置いたPDFファイルを開くようにします。
+
+$ cp ~/Dropbox/somedir/somefile.pdf /tmp/tmp.pdf
+$ open -a Skim /tmp/tmp.pdf
+$ fswatch ~/Dropbox/somedir/somefile.pdf | xargs -t -I {} cp {} /tmp/tmp.pdf
+
+最後の行は「もし~/Dropbox/somedir/somefile.pdfが更新されたら/tmp/tmp.pdfにコピーし直す」という意味です。これでSkimの自動再読込機能が正常に働きます。
+
+松浦

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./default.css">
+<title>松浦望のウェブページ</title>
+<script src="../googleanalytics.js"></script>
+</head>
+<body>
+Macを買ったらすること（Sierra版）
+<ol>
+<li>FileVaultを切にする
+  <ol>
+    <li>「システム環境設定」→「セキュリティとプライバシー」→「FileVault」→「FileVaultを切にする」
+  </ol>
+<li>ソフトウェアアップデート
+<li>Time Machineでバックアップをとる
+<li>Happy Hacking Keyboardのドライバ
+<li>トラックパッドの設定を変更
+  <ol>
+    <li>「システム環境設定」→「アクセシビリティ」→「マウスとトラックパッド」→「トラックパッドオプション」から「ドラッグを有効にする」をチェック
+  </ol>
+<li>キーボードの設定を変更
+  <ol>
+    <li>「システム環境設定」→「キーボード」→「修飾キー」から「Caps Lockキー」を「Control」に変更
+    <li>「システム環境設定」→「キーボード」→「ショートカット」
+      <ol>
+	<li>「Spotlight」の項目から「Spotlight検索を表示」と「Finderの検索ウインドウを表示」のチェックをはずす
+	<li> 「入力ソース」の項目から「前の入力ソースを選択」を「⌘スペース」に、「入力メニューの次のソースを選択」を「オプション⌘スペース」に変更
+      </ol>
+  </ol>
+<li><a href="https://developer.apple.com/downloads/">Command Line Tools (macOS 10.12) for Xcode</a>をインストール（Xcode本体は不要）（ただしもしmacOS 10.12用のCommand Line Toolsが見つからない場合は、仕方ないのでまず「App Store」からXcodeをインストールして、Xcode経由でCommand Line Toolsを入れる）
+<li>SSHの設定
+  <ol>
+    <li>ssh-keygen -t rsa
+    <li>cat ~/.ssh/id_rsa.pub | ssh user_name@server_name 'cat >> .ssh/authorized_keys'
+  </ol>
+<li><a href="https://www.dropbox.com/ja/install?os=mac">Dropbox</a>をインストール
+<li>Dropboxを同期（パスワードを手入力するのは大変だからいったん他のマシンから「メモ」に書く）
+<li>App Storeから1Passwordをインストール
+<li>bashの設定
+  <ol>
+    <li>ln -s ~/Dropbox/misc/dotfiles/bash_profile ~/.bash_profile
+    <li>ln -s ~/Dropbox/misc/dotfiles/bashrc ~/.bashrc
+  </ol>
+<li>メールの設定
+  <ol>
+    <li>「メール」→「環境設定」→「アカウント」
+    <li>「iCloud」の「このアカウントを使用」のチェックをはずす
+    <li>gmailのアカウントを追加
+      <ol>
+	<li>「+」を押す→「メールアカウントのプロバイダを選択」から「Google」を選択し、メールアドレスとパスワードを入力
+	<li>「アカウント情報」の「説明」はたとえば「Google」としておく。
+      </ol>
+    <li>大学のアカウントを追加
+      <ol>
+	<li>「+」を押す→「メールアカウントのプロバイダを選択」から「Google」を選択し、メールアドレスとパスワードを入力
+	<li>「アカウント情報」の「説明」はたとえば「Google (fukuoka-u)」としておく。
+	<li>「アカウント情報」の「送信用メールサーバ」として、「Google (fukuoka-u)」ではなく「Google」のほうを選択。（こうしておけば、大学のメールアドレスから送っても「Google」のほうの送信済みフォルダに残るので、たとえば大学を異動したときにも過去のメールが参照できて便利）
+      </ol>
+  </ol>
+<li>TeXをインストール
+  <ol>
+    <li><a href="https://tug.org/mactex/">MacTeX</a>（2017年版）をインストール。これによりTeXShopやLaTeXiTも自動的にインストールされる。
+    <li>MacTeXの設定（ただしこの情報は2016年10月5日現在のもの）
+      <ol>
+	<li>open /Applications/TeX/TeX\ Live\ Utility.app
+	<li>「TeX Live ユーティリティ」→「更新があるか確認」
+	<li>「作業」から「すべてのパッケージを更新」
+	<li>cd /usr/local/texlive/2017/texmf-dist/scripts/cjk-gs-integrate
+	<li>sudo perl cjk-gs-integrate.pl --link-texmf --force
+	<li>sudo mktexlsr
+	<li>sudo kanji-config-updmap-sys --jis2004 hiragino-elcapitan-pron
+      </ol>
+    <li>TeX Shopの設定
+      <ol>
+	<li>open /Applications/TeX/TeXShop.app
+	<li>「TeXShop」から「アップデートを確認」
+	<li>「TeXShop」→「環境設定」→「書類」で「設定プロファイル」を「upTeX (ptex2pdf)」にする
+      </ol>
+    <li>LaTeXiTの設定
+      <ol>
+	<li>open /Applications/TeX/LaTeXiT.app（これをDockに登録）
+	<li>フォントサイズやテンプレートなど
+      </ol>
+  </ol>
+<li>Emacsをインストール
+  <ol>
+    <li>まずMacPortsをインストール
+      <ol>
+	<li><a href="http://sourceforge.net/projects/macports/files/MacPorts/">http://sourceforge.net/projects/macports/files/MacPorts/</a>からpkgをダウンロード（version 2.3.4以上のもの）してインストール
+	<li>sudo port -d selfupdate
+      </ol>
+    <li>sudo port install autoconf
+    <li>sudo port install automake
+    <li>Emacsをインストール
+      <ol>
+	<li>mkdir ~/Sources
+	<li>cd ~/Sources/
+	<li>EMACS_VER=24.4
+	<li>curl -O http://ftp.gnu.org/pub/gnu/emacs/emacs-${EMACS_VER}.tar.gz
+	<li>curl -O http://plamo.linet.gr.jp/%7Ematsuki/mac/emacs-24.4-20140417-inline.patch
+	<li>tar xvfz emacs-${EMACS_VER}.tar.gz
+	<li>cd emacs-${EMACS_VER}
+	<li>patch -p1 < ../emacs-24.4-20140417-inline.patch
+	<li>./configure --with-ns --without-x
+	<li>make -j4 bootstrap
+	<li>make install
+	<li>mv nextstep/Emacs.app/ /Applications/
+	<li>open /Applications/Emacs.app（これをDockに登録）
+	<li>ln -s ~/Dropbox/misc/dotfiles/init.el ~/.emacs.d/.init.el
+	<li>ln -s ~/.emacs.d/.init.el ~/.emacs.el
+      </ol>
+  </ol>
+<li>そのほかのソフトウェアをインストール
+  <ol>
+    <li><a href="http://www.yatex.org">YaTeX</a>
+    <li><a href="http://skim-app.sourceforge.net/">Skim</a>
+      <ol>
+	<li>インストール後にターミナルで defaults write -app Skim SKAutoReloadFileUpdate -boolean true
+	<li>「Skim」→「環境設定」→「同期する」の「PDF-TeX 同期サポート」の「初期値」としてEmacsを選択
+      </ol>
+    <li><a href="http://www.papersapp.com/mac/">Papers</a>
+    <li><a href="http://www.skype.com/ja/">Skype</a>
+    <li>プリンタのドライバ
+    <li>App Storeから
+      <ol>
+	<li>MasterMoney
+	<li>OmniGraffle
+	<li>TaskPaper
+	<li>PopClip
+	<li>Twitter
+	<li>Window Tidy
+      </ol>
+    <li>Firefox
+      <ol>
+	<li>必要なら大学のサーバへトンネルを掘る
+      </ol>
+    <li>Mathematica
+    <li>MATLAB
+    <li>VMware Fusion
+    <li>Windows
+    <li><a href="http://gimp.lisanet.de/">gimp</a>
+    <li>mac portsから
+      <ol>
+	<li>sudo port install fswatch（コマンド fswatch はスカイプ会議で Dropbox+Skim を使うときに活躍。<a href="./skim_and_dropbox.txt">詳細</a>）
+	<li>sudo port install qpdf（コマンド qpdf はPDFファイルの暗号化などに使う）
+      </ol>
+  </ol>
+<li>「システム環境設定」→「一般」→「書類を閉じるときに変更内容を保持するかどうかを確認」をオンにする。（こうしておけば、プレビューでPDFファイルを開いたときに不用意にクリックしただけで編集済みになり閉じたときに編集済みバージョンが上書き保存されてしまう、というよくある現象が避けられる）
+</ol>
+</body>
+</html>
