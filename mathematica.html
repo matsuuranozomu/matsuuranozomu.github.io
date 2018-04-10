@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./default.css">
+<script type="text/javascript">
+function storage(id){ obj=(document.all)?document.all(id):((document.getElementById)?document.getElementById(id):null); if(obj) obj.style.display=(obj.style.display=="none")?"block":"none"; }
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+<title>Mathematicaの覚え書き/松浦望</title>
+</head>
+<body>
+Mathematicaの覚え書き
+<ul>
+<!----------------------------------------------------------------------------->
+<li><a href="#hirota" onclick="storage('hirota');return false">広田微分</a>
+<div id="hirota" style="display:none">
+広田の \(D\)-operator は多変数関数の組 \(f, g\) に対して
+\[
+D_x^m D_y^n\, f\cdot g =
+\left.
+\left(\frac{\partial}{\partial x} - \frac{\partial}{\partial x'}\right)^m
+\left(\frac{\partial}{\partial y} - \frac{\partial}{\partial y'}\right)^n
+f \left(x, y\right)
+g \left(x', y'\right)
+\right|_{x'=x,\, y'=y}
+\]
+と定義される偏微分作用素である。関数 \(f, g\) が3変数以上の場合も同じように定める。広田微分を Mathematica で計算するには、たとえば再帰的に
+<pre>
+HD[listofvars_,listofnums_][f_,g_]:= Module[{var,num,max,index,currentvar},
+   var=listofvars;
+   num=listofnums;
+   max=Length[var];
+   index=1;
+   currentvar=var[[index]];
+   If[max!=Length[num],Return[],If[num==Table[0,max],Return[f*g],
+     While[index<=max,
+      (*starting main part*)
+      While[num[[index]]>0,
+       num=ReplacePart[num,index->num[[index]]-1];
+       Return[HD[var,num][D[f,currentvar],g]-HD[var,num][f,D[g,currentvar]]]];
+      (*ending main part*)
+      index++;
+      currentvar=var[[index]];]]]];
+</pre>
+と書けばよい。使い方は、もし \(D_x^2\, f\cdot g\) を計算したければ
+<pre>
+HD[{x},{2}][f[x],g[x]]
+</pre>
+とし、あるいはもし \(D_t D_x^2\, f\cdot g\) を計算したければ
+<pre>
+HD[{x,t},{2,1}][f[x,t],g[x,t]]
+</pre>
+とする。
+</div>
+<!----------------------------------------------------------------------------->
+<li><a href="#setdelayed" onclick="storage('setdelayed');return false">即時定義と遅延定義</a>
+<div id="setdelayed" style="display:none">
+即時定義 <pre style="display:inline">=</pre> と遅延定義 <pre style="display:inline">:=</pre> でたとえば
+<pre>
+a[x_]=D[x^2,x];
+b[x_]:=D[x^2,x];
+</pre>
+と書いたとき <pre style="display:inline">a[2]</pre> の値は正しく <pre style="display:inline">4</pre> と表示されるが <pre style="display:inline">b[2]</pre> の評価はエラーになる。後者を評価したい場合は <pre style="display:inline">b[x]/.x->2</pre> と書く。一般に、関数を定義するときは、もしそれが即時定義で書けるのなら即時定義で書いておくほうが都合のよいことが多い。また、もし遅延定義をした場合でも、関数の中身にあらかじめ記号的に評価できるような部分があれば <pre style="display:inline">Evaluate</pre> しておくとよい。たとえば
+<pre>
+f[x_]:=Integrate[Exp[-t^2],{t,0,x}];
+g[x_]:=Evaluate[Integrate[Exp[-t^2],{t,0,x}]];
+{Timing[Do[f[k],{k,0,100}]],Timing[Do[g[k],{k,0,100}]]}
+</pre>
+の実行結果は <pre style="display:inline">{{0.505576,Null},{0.000298,Null}}</pre> などとなり、このように実行時間にかなりの差が生じうる。
+</div>
+<!----------------------------------------------------------------------------->
+<li><a href="#boldfigure" onclick="storage('boldfigure');return false">テストの問題用紙に載せるグラフィクス</a>
+<div id="boldfigure" style="display:none">
+テストの問題用紙に載せるグラフィクスを生成するときは、各種 Plot コマンドのオプションとして
+<pre>
+PlotPoints->100,
+PlotRange->{{-0.5,5.5},{-0.5,5.5}},
+Ticks->{Table[n,{n,0,5}],Table[n,{n,0,5}]},
+Axes->True,
+AxesOrigin->{0,0},
+PlotStyle->Black,
+AxesStyle->Black
+</pre>
+などを付ける。原稿を実際に印刷して、とくに座標軸が濃くはっきりと印字できているか確認すること。
+</div>
+<!----------------------------------------------------------------------------->
+<!--
+<li><a href="#xxx" onclick="storage('xxx');return false">xxx</a>
+<div id="xxx" style="display:none">
+テスト
+<pre>
+Plot
+</pre>
+など
+</div>
+-->
+<!----------------------------------------------------------------------------->
+</ul>
+</body>
+</html>

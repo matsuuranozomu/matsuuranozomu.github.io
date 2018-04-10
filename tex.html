@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./default.css">
+<script type="text/javascript">
+function storage(id){ obj=(document.all)?document.all(id):((document.getElementById)?document.getElementById(id):null); if(obj) obj.style.display=(obj.style.display=="none")?"block":"none"; }
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+<title>TeXのバッドノウハウ/松浦望</title>
+</head>
+<body>
+\(\mathrm{\TeX}\)のバッドノウハウ
+<ul>
+<!----------------------------------------------------------------------------->
+<li><a href="#2versions" onclick="storage('2versions');return false">論文を二版つくる</a>
+<div id="2versions" style="display:none">
+論文を簡潔にまとめるためにしばしば計算の詳細を省いたりするけれど、後で読みなおした時にはたいてい細部を忘れてしまっていて、とても読みづらい。だから出版用と自分用の二種類を作っておきたい。ひとつのソースファイルで二種類の PDF を作るにはどうすればよいか。出版用を publish.pdf 自分用を private.pdf という名前にするとき、ソースファイル名は publish.tex として、そのプリアンブルに
+<pre>
+\newif\ifdetail
+\ifx\DETAIL\DUMMY\else\detailtrue\fi
+</pre>
+と書いておく。このとき publish.tex をコンパイルすると \else の前の空文が実行されて（なぜなら \DETAIL も \DUMMY もともに定義されておらず、その意味で「等しい」と判断されるから）\detailtrue は実行されない。したがって本文中で
+<pre>
+\ifdetail
+自分用の文章
+\else
+出版用の文章
+\fi
+</pre>
+と書いたところでは「出版用の文章」がコンパイルされる。これとは別に
+<pre>
+\def\DETAIL{detail}
+\input{publish.tex}
+</pre>
+とだけ書いたソースファイル private.tex を用意しておく。今度は \DETAIL が detail と定義されたことで \DUMMY とは異なるから、コンパイル時には \detailtrue が実行されて、したがって本文中の分岐では「自分用の文章」が選ばれる。
+</div>
+<!----------------------------------------------------------------------------->
+<li><a href="#1in2" onclick="storage('1in2');return false">二段組の文章中に一段組の部分を作る</a>
+<div id="1in2" style="display:none">
+<pre>
+\usepackage{multicol}
+\setlength{\columnseprule}{0.4pt}
+\setlength{\columnsep}{10mm}
+\begin{multicols}{2}
+ここは二段組
+\end{multicols}
+\begin{multicols*}{2}[%
+ここだけ一段組になる
+]
+また二段組にもどる
+\end{multicols*}
+</pre>
+</div>
+<!----------------------------------------------------------------------------->
+</ul>
+</body>
+</html>
