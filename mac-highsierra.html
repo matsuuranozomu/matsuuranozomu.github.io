@@ -92,37 +92,33 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
         <li>フォントサイズやテンプレートなど
       </ol>
   </ol>
-<li>Emacsをインストール
+<li>Atomをインストール
   <ol>
-    <li>sudo port install autoconf
-    <li>sudo port install automake
-    <li>Emacsをインストール（<a href="https://qiita.com/takaxp/items/e07bb286d80fa9dd8e05">ここ</a>参照）
+    <li><a href="https://atom.io">Atom</a>をダウンロードしてインストール
+    <li>「Atom」→「Preferences」→「Install」から次のパッケージをSearchしてインストール
       <ol>
-        <li>mkdir ~/buildemacs
-        <li>cd ~/buildemacs
-        <li>EMACSVER=26.1
-        <li>curl -LO http://ftpmirror.gnu.org/emacs/emacs-$EMACSVER.tar.gz
-        <li>curl -LO https://gist.githubusercontent.com/takaxp/3314a153f6d02d82ef1833638d338ecf/raw/156aaa50dc028ebb731521abaf423e751fd080de/emacs-25.2-inline.patch
-        <li>tar zxvf emacs-$EMACSVER.tar.gz
-        <li>cd emacs-$EMACSVER
-        <li>patch -p1 < ../emacs-25.2-inline.patch
-	<li>./autogen.sh
-        <li>./configure --without-x --with-ns --with-modules
-        <li>make bootstrap -j1
-        <li>make install -j1
-        <li>mv nextstep/Emacs.app/ /Applications/
-        <li>open /Applications/Emacs.app（これをDockに登録）
-        <li>ln -s ~/Dropbox/misc/dotfiles/init.el ~/.emacs.d/.init.el
-        <li>ln -s ~/.emacs.d/.init.el ~/.emacs.el
+        <li>atomic-emacs
+        <li>language-latex
+        <li>latex
+      </ol>
+    <li>「Atom」→「Preferences」→「Packages」→「latex」の「Settings」のボタンを押して
+      <ol>
+        <li>「TeX Path」を/Library/TeX/texbin/に
+        <li>「Engine」をuplatexに
+        <li>「Opener」をskimに
+      </ol>
+    <li>ショートカットキーを変更するため ~/.atom/packages/latex/keymaps/latex.json を書き換える。<a href="http://xartaky.hatenablog.jp/entry/2017-09-21-atom-lualatex#Atom-の-latex-パッケージのショートカットを変更する">ここ</a>参照。
+      <ol>
+        <li>「"ctrl-alt-b": "latex:build"」を「"cmd-i": "latex:build"」に。これで⌘-iでコンパイルできる。
+        <li>「"ctrl-alt-s": "latex:sync"」を「"cmd-g": "latex:sync"」に。これで⌘-gでPDFファイルの対応箇所に飛べる。
       </ol>
   </ol>
 <li>そのほかのソフトウェアをインストール
   <ol>
-    <li><a href="http://www.yatex.org">YaTeX</a>
     <li><a href="http://skim-app.sourceforge.net/">Skim</a>
       <ol>
         <li>インストール後にターミナルで defaults write -app Skim SKAutoReloadFileUpdate -boolean true
-        <li>「Skim」→「環境設定」→「同期する」の「PDF-TeX 同期サポート」の「初期値」としてEmacsを選択
+        <li>「Skim」→「環境設定」→「同期する」の「PDF-TeX 同期サポート」の「初期値」としてAtomを選択
       </ol>
     <li>mac portsから
       <ol>
@@ -136,7 +132,9 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
       <ol>
         <li>MasterMoney
         <li>OmniGraffle
+        <li>TaskPaper
         <li>PopClip
+        <li>Window Tidy
         <li>egword Universal 2
       </ol>
     <li><a href="https://www.mozilla.org/ja/firefox/">Firefox</a>
@@ -144,30 +142,34 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
         <li>必要なら大学のサーバへトンネルを掘る
       </ol>
     <li>Mathematica
+    <li>MATLAB
     <li>VMware Fusion
     <li>Windows
     <li><a href="http://gimp.lisanet.de/">gimp</a>
-    <li>もし必要ならAtomも
+    <li>もし必要ならEmacsも
       <ol>
-	<li><a href="https://atom.io">Atom</a>をダウンロードしてインストール
-	<li>「Atom」→「Preferences」→「Install」から次のパッケージをSearchしてインストール
-	  <ol>
-            <li>atomic-emacs
-            <li>language-latex
-            <li>latex
-	  </ol>
-	<li>「Atom」→「Preferences」→「Packages」→「latex」の「Settings」のボタンを押して
-	  <ol>
-            <li>「TeX Path」を/Library/TeX/texbin/に
-            <li>「Engine」をuplatexに
-            <li>「Opener」をskimに
-	  </ol>
-	<li>ショートカットキーを変更するため ~/.atom/packages/latex/keymaps/latex.json を書き換える。<a href="http://xartaky.hatenablog.jp/entry/2017-09-21-atom-lualatex#Atom-の-latex-パッケージのショートカットを変更する">ここ</a>参照。
-	  <ol>
-            <li>「"ctrl-alt-b": "latex:build"」を「"cmd-i": "latex:build"」に。これで⌘-iでコンパイルできる。
-            <li>「"ctrl-alt-s": "latex:sync"」を「"cmd-g": "latex:sync"」に。これで⌘-gでPDFファイルの対応箇所に飛べる。
-	  </ol>
+        <li>sudo port install autoconf
+        <li>sudo port install automake
+        <li>Emacsをインストール
+          <ol>
+            <li>mkdir ~/Sources
+            <li>cd ~/Sources/
+            <li>EMACS_VER=24.4
+            <li>curl -O http://ftp.gnu.org/pub/gnu/emacs/emacs-${EMACS_VER}.tar.gz
+            <li>curl -O http://plamo.linet.gr.jp/%7Ematsuki/mac/emacs-24.4-20140417-inline.patch
+            <li>tar xvfz emacs-${EMACS_VER}.tar.gz
+            <li>cd emacs-${EMACS_VER}
+            <li>patch -p1 < ../emacs-24.4-20140417-inline.patch
+            <li>./configure --with-ns --without-x
+            <li>make -j4 bootstrap
+            <li>make install
+            <li>mv nextstep/Emacs.app/ /Applications/
+            <li>open /Applications/Emacs.app（これをDockに登録）
+            <li>ln -s ~/Dropbox/misc/dotfiles/init.el ~/.emacs.d/.init.el
+            <li>ln -s ~/.emacs.d/.init.el ~/.emacs.el
+          </ol>
       </ol>
+    <li><a href="http://www.yatex.org">YaTeX</a>
   </ol>
 <li>「システム環境設定」→「一般」→「書類を閉じるときに変更内容を保持するかどうかを確認」をオンにする。（こうしておけば、プレビューでPDFファイルを開いたときに不用意にクリックしただけで編集済みになり閉じたときに編集済みバージョンが上書き保存されてしまう、というよくある現象が避けられる）
 </ol>

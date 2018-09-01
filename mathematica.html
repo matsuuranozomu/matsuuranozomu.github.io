@@ -14,9 +14,68 @@ function storage(id){ obj=(document.all)?document.all(id):((document.getElementB
 Mathematicaの覚え書き
 <ul>
 <!----------------------------------------------------------------------------->
+<li><a href="#list" onclick="storage('list');return false">リストの操作あれこれ</a>
+<div id="list" style="display:none">
+<pre>
+入力 Total[{a,b,c}]
+出力 a+b+c
+
+入力 Accumulate[{a,b,c}]
+出力 {a,a+b,a+b+c}
+
+入力 RotateLeft[{a,b,c}]
+出力 {b,c,a}
+
+入力 RotateRight[{a,b,c}]
+出力 {c,a,b}
+
+入力 {a,b,c}+x
+出力 {a+x,b+x,c+x}
+
+入力 {a,b,c}*x
+出力 {a*x,b*x,c*x}
+
+入力 {a,b,c}+{x,y,z}
+出力 {a+x,b+y,c+z}
+
+入力 {a,b,c}*{x,y,z}
+出力 {a*x,b*y,c*z}
+
+入力 {{a,b,c},{d,e,f}}*{{x,y,z},{u,v,w}}
+出力 {{a*x,b*y,c*z},{d*u,e*v,f*w}}
+
+入力 Map[Total,{{a,b,c},{d,e,f}}*{{x,y,z},{u,v,w}}]
+出力 {a*x+b*y+c*z,d*u+e*v+f*w}
+
+入力 Map[f,{a,b,c}]
+出力 {f[a],f[b],f[c]}
+
+入力 Through[{f,g,h}[a]]
+出力 {f[a],g[a],h[a]}
+
+入力 Thread[f[{a,b,c},x]]
+出力 {f[a,x],f[b,x],f[c,x]}
+
+入力 Thread[f[x,{a,b,c}]]
+出力 {f[x,a],f[x,b],f[x,c]}
+
+入力 Thread[f[{a,b,c},{x,y,z}]]
+出力 {f[a,x],f[b,y],f[c,z]}
+
+入力 Map[Through,Thread[{f,g}[{a,b,c}]]]
+出力 {{f[a],g[a]},{f[b],g[b]},{f[c],g[c]}}
+
+入力 Thread[{x,y,z}=={a,b,c}]
+出力 {x==a,y==b,z==c}
+
+入力 Operate[g,f[a,b]]
+出力 g[f][a,b]
+</pre>
+</div>
+<!----------------------------------------------------------------------------->
 <li><a href="#hirota" onclick="storage('hirota');return false">広田微分</a>
 <div id="hirota" style="display:none">
-広田の \(D\)-operator は多変数関数の組 \(f, g\) に対して
+広田の \(D\)-operator は2変数関数の組 \(f, g\) に対して
 \[
 D_x^m D_y^n\, f\cdot g =
 \left.
@@ -29,20 +88,20 @@ g \left(x', y'\right)
 と定義される偏微分作用素である。関数 \(f, g\) が3変数以上の場合も同じように定める。広田微分を Mathematica で計算するには、たとえば再帰的に
 <pre>
 HD[listofvars_,listofnums_][f_,g_]:= Module[{var,num,max,index,currentvar},
-   var=listofvars;
-   num=listofnums;
-   max=Length[var];
-   index=1;
-   currentvar=var[[index]];
-   If[max!=Length[num],Return[],If[num==Table[0,max],Return[f*g],
-     While[index<=max,
-      (*starting main part*)
-      While[num[[index]]>0,
-       num=ReplacePart[num,index->num[[index]]-1];
-       Return[HD[var,num][D[f,currentvar],g]-HD[var,num][f,D[g,currentvar]]]];
-      (*ending main part*)
-      index++;
-      currentvar=var[[index]];]]]];
+    var=listofvars;
+    num=listofnums;
+    max=Length[var];
+    index=1;
+    currentvar=var[[index]];
+    If[max!=Length[num],Return[],If[num==Table[0,max],Return[f*g],
+        While[index<=max,
+            (*starting main part*)
+            While[num[[index]]>0,
+                num=ReplacePart[num,index->num[[index]]-1];
+                Return[HD[var,num][D[f,currentvar],g]-HD[var,num][f,D[g,currentvar]]]];
+            (*ending main part*)
+            index++;
+            currentvar=var[[index]];]]]];
 </pre>
 と書けばよい。使い方は、もし \(D_x^2\, f\cdot g\) を計算したければ
 <pre>
@@ -71,19 +130,71 @@ g[x_]:=Evaluate[Integrate[Exp[-t^2],{t,0,x}]];
 の実行結果は <pre style="display:inline">{{0.505576,Null},{0.000298,Null}}</pre> などとなり、このように実行時間にかなりの差が生じうる。
 </div>
 <!----------------------------------------------------------------------------->
+<li><a href="#nintegrate" onclick="storage('nintegrate');return false">数値積分あれこれ</a>
+<div id="nintegrate" style="display:none">
+<ol>
+<li>
+<pre style="display:inline">NIntegrate</pre> を使うとき、評価の順番が大切になることがある。たとえば
+<pre>
+f[a_]:=NIntegrate[(2-a)*Sin[a*x],{x,0,Pi}]
+</pre>
+と書くと <pre style="display:inline">f[0.5]</pre> は計算できるが <pre style="display:inline">f[a]</pre> はエラーとなる。したがって例えば <pre style="display:inline">NMaximize[f[a],a]</pre> のように関数 <pre style="display:inline">f</pre> を数値的に最大化することができなくなってしまう。計算の順序をコントロールするには、<pre style="display:inline">NumericQ</pre> とパターンのテストを使って、関数 <pre style="display:inline">f</pre> が数値を受けとった場合にのみこれを評価するように定義する。すなわち
+<pre>
+f[a_?NumericQ]:=NIntegrate[(2-a)*Sin[a*x],{x,0,Pi}]
+</pre>
+とする。このとき <pre style="display:inline">f[a]</pre> を評価すると関数が未評価のまま返されるので、したがって例えば <pre style="display:inline">NMaximize[f[a],a]</pre> のように数値的に最大化することができるようになる。
+<li>
+<pre style="display:inline">NIntegrate</pre> の評価を高速化する方法は、被積分関数の性質による。
+一般には <pre style="display:inline">NIntegrate</pre> のオプション <pre style="display:inline">"SymbolicProcessing"</pre> を <pre style="display:inline">0</pre> に設定し、積分を記号的に操作しないようにすると高速に評価できる場合がある。
+<pre>
+NIntegrate[f[x],{x,0,1},Method->{Automatic,"SymbolicProcessing"->0}]
+</pre>
+あるいはもし被積分関数に特異点があれば <pre style="display:inline">Exclusions</pre> オプションで教えておくとよい。
+<pre>
+NIntegrate[1/Sqrt[Sin[x]],{x,0,10},Exclusions->Sin[x]==0]
+</pre>
+<li>
+具体例を挙げる。関数 \(\kappa\) を好きなようにひとつ与えて、それを曲率に持つような速さ \(1\) の平面曲線 \(\gamma\) を描くことを考えよう。そのような曲線 \(\gamma\) は
+\[
+\gamma \left(s\right) = \int_0^s
+\begin{bmatrix}
+\cos \theta \left(\sigma\right)\\
+\sin \theta \left(\sigma\right)
+\end{bmatrix}
+d\sigma,\quad
+\theta \left(s\right) = \int_0^s \kappa \left(\sigma\right) d\sigma
+\]
+と表現できるから、大体 \(\kappa\) を2回ほど数値積分すれば \(\gamma\) が描画できる。
+たとえば
+<pre>
+kappa[s_]=Sin[Cos[s]];
+init=0;
+theta[s_?NumericQ]:=NIntegrate[kappa[ss],{ss,init,s},Method->{Automatic,"SymbolicProcessing"->0}];
+gamma[s_?NumericQ]:=Module[{xcoord,ycoord},
+    xcoord=NIntegrate[Cos[theta[ss]],{ss,init,s},Method->{Automatic,"SymbolicProcessing"->0}];
+    ycoord=NIntegrate[Sin[theta[ss]],{ss,init,s},Method->{Automatic,"SymbolicProcessing"->0}];
+    {xcoord,ycoord}];
+ParametricPlot[gamma[s],{s,init,2*Pi}]
+</pre>
+と書けばよい。
+</ol>
+</div>
+<!----------------------------------------------------------------------------->
 <li><a href="#boldfigure" onclick="storage('boldfigure');return false">テストの問題用紙に載せるグラフィクス</a>
 <div id="boldfigure" style="display:none">
 テストの問題用紙に載せるグラフィクスを生成するときは、各種 Plot コマンドのオプションとして
 <pre>
 PlotPoints->100,
-PlotRange->{{-0.5,5.5},{-0.5,5.5}},
-Ticks->{Table[n,{n,0,5}],Table[n,{n,0,5}]},
+PlotRange->{{-5,5},{-5,5}},
+Ticks->{Table[n,{n,-5,5}],Table[n,{n,-5,5}]},
 Axes->True,
 AxesOrigin->{0,0},
 PlotStyle->Black,
-AxesStyle->Black
+AxesStyle->Black,
+PlotLabel->None,
+LabelStyle->{GrayLevel[0],Bold}
 </pre>
-などを付ける。原稿を実際に印刷して、とくに座標軸が濃くはっきりと印字できているか確認すること。
+などを付ける。原稿を実際に印刷して、とくに座標軸や目盛りが濃くはっきりと印字できているか確認すること。
 </div>
 <!----------------------------------------------------------------------------->
 <!--
