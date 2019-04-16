@@ -116,18 +116,41 @@ HD[{x,t},{2,1}][f[x,t],g[x,t]]
 <!----------------------------------------------------------------------------->
 <li><a href="#setdelayed" onclick="storage('setdelayed');return false">即時定義と遅延定義</a>
 <div id="setdelayed" style="display:none">
+<ol>
+<li>
 即時定義 <pre style="display:inline">=</pre> と遅延定義 <pre style="display:inline">:=</pre> でたとえば
 <pre>
 a[x_]=D[x^2,x];
 b[x_]:=D[x^2,x];
 </pre>
-と書いたとき <pre style="display:inline">a[2]</pre> の値は正しく <pre style="display:inline">4</pre> と表示されるが <pre style="display:inline">b[2]</pre> の評価はエラーになる。後者を評価したい場合は <pre style="display:inline">b[x]/.x->2</pre> と書く。一般に、関数を定義するときは、もしそれが即時定義で書けるのなら即時定義で書いておくほうが都合のよいことが多い。また、もし遅延定義をした場合でも、関数の中身にあらかじめ記号的に評価できるような部分があれば <pre style="display:inline">Evaluate</pre> しておくとよい。たとえば
+と書いたとき <pre style="display:inline">a[2]</pre> の値は正しく <pre style="display:inline">4</pre> と表示されるが <pre style="display:inline">b[2]</pre> の評価はエラーになる。後者を評価したい場合は <pre style="display:inline">b[x]/.x->2</pre> と書く。一般に、関数を定義するときは、もしそれが即時定義で書けるのなら即時定義で書いておくほうが都合のよいことが多い。
+<li>
+ただし、遅延定義のほうが好都合のこともある。たとえば、平面内の2点の座標を与えてその垂直二等分線の方程式を返すような関数は、遅延定義で
+<pre>
+line[pt1_,pt2_]:=Module[{midpt,diff},
+    midpt=1/2*(pt1+pt2);
+    diff=pt2-pt1;
+    diff[[2]]*(y-midpt[[2]])==-diff[[1]]*(x-midpt[[1]])
+]
+</pre>
+と書ける。もしこれを即時定義で
+<pre>
+line[pt1_,pt2_]=Module[{midpt,diff},
+    midpt=1/2*(pt1+pt2);
+    diff=pt2-pt1;
+    diff[[2]]*(y-midpt[[2]])==-diff[[1]]*(x-midpt[[1]])
+]
+</pre>
+書いてしまうと、期待通りの出力が得られない。なぜなら、この書き方では引数<pre style="display:inline">pt1</pre>, <pre style="display:inline">pt2</pre>をベクトルだと宣言していないため<pre style="display:inline">midpt[[1]]</pre>, <pre style="display:inline">midpt[[2]]</pre>, <pre style="display:inline">diff[[1]]</pre>, <pre style="display:inline">diff[[2]]</pre>がまったく異なる意味に解釈されてしまうため。
+<li>
+また一般に、もし遅延定義をした場合は、関数の中身にあらかじめ記号的に評価できるような部分があれば <pre style="display:inline">Evaluate</pre> しておくとよい。たとえば
 <pre>
 f[x_]:=Integrate[Exp[-t^2],{t,0,x}];
 g[x_]:=Evaluate[Integrate[Exp[-t^2],{t,0,x}]];
 {Timing[Do[f[k],{k,0,100}]],Timing[Do[g[k],{k,0,100}]]}
 </pre>
 の実行結果は <pre style="display:inline">{{0.505576,Null},{0.000298,Null}}</pre> などとなり、このように実行時間にかなりの差が生じうる。
+</ol>
 </div>
 <!----------------------------------------------------------------------------->
 <li><a href="#nintegrate" onclick="storage('nintegrate');return false">数値積分あれこれ</a>
