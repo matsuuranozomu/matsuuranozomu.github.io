@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="./default.css">
-<title>Macを買ったらすること（High Sierra版）/松浦望</title>
+<link rel="stylesheet" type="text/css" href="../default.css">
+<title>Macを買ったらすること（Mojave版）/松浦望</title>
 </head>
 <body>
-Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra.html">Sierra版はこちら</a>）
+Macを買ったらすること（これはMojave版。<a href="./mac-highsierra.html">High Sierra版はこちら</a>）
 <ol>
 <li>FileVaultを切にする
   <ol>
@@ -28,7 +28,7 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
         <li> 「入力ソース」の項目から「前の入力ソースを選択」を「⌘スペース」に、「入力メニューの次のソースを選択」を「オプション⌘スペース」に変更
       </ol>
   </ol>
-<li><a href="https://developer.apple.com/downloads/">Command Line Tools (macOS 10.13) for Xcode</a>をインストール（Xcode本体は不要）（ただしもしmacOS 10.13用のCommand Line Toolsが見つからない場合は、仕方ないのでまず「App Store」からXcodeをインストールして、Xcode経由でCommand Line Toolsを入れる）
+<li><a href="https://developer.apple.com/downloads/">Command Line Tools (macOS 10.14) for Xcode</a>をインストール（Xcode本体は不要）（ただしもしmacOS 10.14用のCommand Line Toolsが見つからない場合は、仕方ないのでまず「App Store」からXcodeをインストールして、Xcode経由でCommand Line Toolsを入れる）
 <li>SSHの設定
   <ol>
     <li>ssh-keygen -t rsa
@@ -36,17 +36,18 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
   </ol>
 <li><a href="https://www.dropbox.com/ja/install?os=mac">Dropbox</a>をインストール
 <li>Dropboxを同期（パスワードを手入力するのは大変だからいったん他のマシンから「メモ」に書く）
-<li>App Storeから1Passwordをインストール
+<li><a href="https://bitwarden.com/">Bitwarden</a>をインストール
 <li>bashの設定
   <ol>
-    <li>ln -s ~/Dropbox/misc/dotfiles/bash_profile ~/.bash_profile
+    <li>ln -s ~/Dropbox/misc/dotfiles/profile ~/.profile
     <li>ln -s ~/Dropbox/misc/dotfiles/bashrc ~/.bashrc
+    <li>ln -s ~/Dropbox/misc/dotfiles/bash_profile ~/.bash_profile
   </ol>
 <li>gitをインストール
   <ol>
     <li>まずMacPortsをインストール
       <ol>
-        <li><a href="https://www.macports.org/install.php">https://www.macports.org/</a>からHigh Sierra用のpkgをダウンロードしてインストール
+        <li><a href="https://www.macports.org/install.php">https://www.macports.org/</a>からMojave用のpkgをダウンロードしてインストール
         <li>sudo port -d selfupdate
       </ol>
     <li>sudo port install git
@@ -54,7 +55,7 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
   </ol>
 <li>TeXをインストール
   <ol>
-    <li><a href="https://tug.org/mactex/">MacTeX</a>（2017年版）をインストール。これによりTeXShopやLaTeXiTも自動的にインストールされる。
+    <li><a href="https://tug.org/mactex/">MacTeX</a>をインストール。これによりTeXShopやLaTeXiTも自動的にインストールされる。
     <li>MacTeXの設定
       <ol>
         <li>open /Applications/TeX/TeX\ Live\ Utility.app
@@ -92,33 +93,37 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
         <li>フォントサイズやテンプレートなど
       </ol>
   </ol>
-<li>Atomをインストール
+<li>Emacsをインストール
   <ol>
-    <li><a href="https://atom.io">Atom</a>をダウンロードしてインストール
-    <li>「Atom」→「Preferences」→「Install」から次のパッケージをSearchしてインストール
+    <li>sudo port install autoconf
+    <li>sudo port install automake
+    <li>Emacsをインストール（<a href="https://qiita.com/takaxp/items/e07bb286d80fa9dd8e05">takaxpさんの記事</a>参照）
       <ol>
-        <li>atomic-emacs
-        <li>language-latex
-        <li>latex
-      </ol>
-    <li>「Atom」→「Preferences」→「Packages」→「latex」の「Settings」のボタンを押して
-      <ol>
-        <li>「TeX Path」を/Library/TeX/texbin/に
-        <li>「Engine」をuplatexに
-        <li>「Opener」をskimに
-      </ol>
-    <li>ショートカットキーを変更するため ~/.atom/packages/latex/keymaps/latex.json を書き換える。<a href="http://xartaky.hatenablog.jp/entry/2017-09-21-atom-lualatex#Atom-の-latex-パッケージのショートカットを変更する">ここ</a>参照。
-      <ol>
-        <li>「"ctrl-alt-b": "latex:build"」を「"cmd-i": "latex:build"」に。これで⌘-iでコンパイルできる。
-        <li>「"ctrl-alt-s": "latex:sync"」を「"cmd-g": "latex:sync"」に。これで⌘-gでPDFファイルの対応箇所に飛べる。
+        <li>mkdir ~/buildemacs
+        <li>cd ~/buildemacs
+        <li>EMACSVER=26.2
+        <li>curl -LO http://ftpmirror.gnu.org/emacs/emacs-$EMACSVER.tar.gz
+        <li>curl -LO https://gist.githubusercontent.com/takaxp/3314a153f6d02d82ef1833638d338ecf/raw/156aaa50dc028ebb731521abaf423e751fd080de/emacs-25.2-inline.patch
+        <li>tar zxvf emacs-$EMACSVER.tar.gz
+        <li>cd emacs-$EMACSVER
+        <li>patch -p1 < ../emacs-25.2-inline.patch
+	<li>./autogen.sh
+        <li>./configure --without-x --with-ns --with-modules
+        <li>make bootstrap -j1
+        <li>make install -j1
+        <li>mv nextstep/Emacs.app/ /Applications/
+        <li>open /Applications/Emacs.app（これをDockに登録）
+        <li>ln -s ~/Dropbox/misc/dotfiles/init.el ~/.emacs.d/.init.el
+        <li>ln -s ~/.emacs.d/.init.el ~/.emacs.el
       </ol>
   </ol>
 <li>そのほかのソフトウェアをインストール
   <ol>
+    <li><a href="http://www.yatex.org">YaTeX</a>
     <li><a href="http://skim-app.sourceforge.net/">Skim</a>
       <ol>
         <li>インストール後にターミナルで defaults write -app Skim SKAutoReloadFileUpdate -boolean true
-        <li>「Skim」→「環境設定」→「同期する」の「PDF-TeX 同期サポート」の「初期値」としてAtomを選択
+        <li>「Skim」→「環境設定」→「同期する」の「PDF-TeX 同期サポート」の「初期値」としてEmacsを選択
       </ol>
     <li>mac portsから
       <ol>
@@ -128,13 +133,11 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
     <li><a href="http://www.papersapp.com/mac/">Papers</a>
     <li><a href="http://www.skype.com/ja/">Skype</a>
     <li>プリンタのドライバ
+    <li>MasterMoney
     <li>App Storeから
       <ol>
-        <li>MasterMoney
         <li>OmniGraffle
-        <li>TaskPaper
         <li>PopClip
-        <li>Window Tidy
         <li>egword Universal 2
       </ol>
     <li><a href="https://www.mozilla.org/ja/firefox/">Firefox</a>
@@ -142,36 +145,33 @@ Macを買ったらすること（これはHigh Sierra版。<a href="./mac-sierra
         <li>必要なら大学のサーバへトンネルを掘る
       </ol>
     <li>Mathematica
-    <li>MATLAB
-    <li>VMware Fusion
-    <li>Windows
+    <li>Maple
+    <li>Office 365
     <li><a href="http://gimp.lisanet.de/">gimp</a>
-    <li>もし必要ならEmacsも
+    <li>もし必要ならAtomも
       <ol>
-        <li>sudo port install autoconf
-        <li>sudo port install automake
-        <li>Emacsをインストール
-          <ol>
-            <li>mkdir ~/Sources
-            <li>cd ~/Sources/
-            <li>EMACS_VER=24.4
-            <li>curl -O http://ftp.gnu.org/pub/gnu/emacs/emacs-${EMACS_VER}.tar.gz
-            <li>curl -O http://plamo.linet.gr.jp/%7Ematsuki/mac/emacs-24.4-20140417-inline.patch
-            <li>tar xvfz emacs-${EMACS_VER}.tar.gz
-            <li>cd emacs-${EMACS_VER}
-            <li>patch -p1 < ../emacs-24.4-20140417-inline.patch
-            <li>./configure --with-ns --without-x
-            <li>make -j4 bootstrap
-            <li>make install
-            <li>mv nextstep/Emacs.app/ /Applications/
-            <li>open /Applications/Emacs.app（これをDockに登録）
-            <li>ln -s ~/Dropbox/misc/dotfiles/init.el ~/.emacs.d/.init.el
-            <li>ln -s ~/.emacs.d/.init.el ~/.emacs.el
-          </ol>
+	<li><a href="https://atom.io">Atom</a>をダウンロードしてインストール
+	<li>「Atom」→「Preferences」→「Install」から次のパッケージをSearchしてインストール
+	  <ol>
+            <li>atomic-emacs
+            <li>language-latex
+            <li>latex
+	  </ol>
+	<li>「Atom」→「Preferences」→「Packages」→「latex」の「Settings」のボタンを押して
+	  <ol>
+            <li>「TeX Path」を/Library/TeX/texbin/に
+            <li>「Engine」をuplatexに
+            <li>「Opener」をskimに
+	  </ol>
+	<li>ショートカットキーを変更するため ~/.atom/packages/latex/keymaps/latex.json を書き換える。<a href="http://xartaky.hatenablog.jp/entry/2017-09-21-atom-lualatex#Atom-の-latex-パッケージのショートカットを変更する">ここ</a>参照。
+	  <ol>
+            <li>「"ctrl-alt-b": "latex:build"」を「"cmd-i": "latex:build"」に。これで⌘-iでコンパイルできる。
+            <li>「"ctrl-alt-s": "latex:sync"」を「"cmd-g": "latex:sync"」に。これで⌘-gでPDFファイルの対応箇所に飛べる。
+	  </ol>
       </ol>
-    <li><a href="http://www.yatex.org">YaTeX</a>
   </ol>
 <li>「システム環境設定」→「一般」→「書類を閉じるときに変更内容を保持するかどうかを確認」をオンにする。（こうしておけば、プレビューでPDFファイルを開いたときに不用意にクリックしただけで編集済みになり閉じたときに編集済みバージョンが上書き保存されてしまう、というよくある現象が避けられる）
+<li>「システム環境設定」→「キーボード」→「ショートカット」→「アプリケーション」から「+」をクリックし、「メニュータイトル」に「ペーストしてスタイルを合わせる」と入力し「キーボードショートカット」に「⌘V」と入力する。（こうしておけば、⌘Vでペーストするときにコピー元のスタイルを引き継ぐことなくいつでも書式なしでペーストすることができる）
 </ol>
 </body>
 </html>
