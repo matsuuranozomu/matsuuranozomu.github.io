@@ -63,6 +63,9 @@ Mathematicaの覚え書き
 入力 Thread[f[{a,b,c},{x,y,z}]]
 出力 {f[a,x],f[b,y],f[c,z]}
 
+入力 Apply[f,{{a,x},{b,y},{c,z}},1]
+出力 {f[a,x],f[b,y],f[c,z]}
+
 入力 Map[Through,Thread[{f,g}[{a,b,c}]]]
 出力 {{f[a],g[a]},{f[b],g[b]},{f[c],g[c]}}
 
