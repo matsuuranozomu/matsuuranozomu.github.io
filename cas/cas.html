@@ -204,6 +204,8 @@ gamma[s_?NumericQ]:=Module[{xcoord,ycoord},
 ParametricPlot[gamma[s],{s,init,2*Pi}]
 </pre>
 と書けばよい。
+<li>
+というか、積分形で書くから数値積分するのがこのように面倒になってしまうのであって（<pre style="display:inline">NIntegrate</pre> は使いづらい）、最初から微分方程式系として書いておき、その数値解法には <pre style="display:inline">NDSolve</pre> を使えばいいんじゃないかな。
 </ol>
 </div>
 <!----------------------------------------------------------------------------->
