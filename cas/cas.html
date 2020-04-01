@@ -69,6 +69,9 @@ Mathematicaの覚え書き
 入力 Map[Through,Thread[{f,g}[{a,b,c}]]]
 出力 {{f[a],g[a]},{f[b],g[b]},{f[c],g[c]}}
 
+入力 Replace[{{a,b,c},{x,y,z}},List->f,1,Heads->True]
+出力 f[{a,b,c},{x,y,z}]
+
 入力 Thread[{x,y,z}=={a,b,c}]
 出力 {x==a,y==b,z==c}
 
