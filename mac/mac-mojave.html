@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="../default.css">
+<title>Macを買ったらすること（Mojave版）/松浦望</title>
+</head>
+<body>
+Macを買ったらすること（これはMojave版。<a href="./mac-highsierra.html">High Sierra版はこちら</a>）
+<ol>
+<li>FileVaultを切にする
+  <ol>
+    <li>「システム環境設定」→「セキュリティとプライバシー」→「FileVault」→「FileVaultを切にする」
+  </ol>
+<li>ソフトウェアアップデート
+<li>Time Machineでバックアップをとる
+<li>Happy Hacking Keyboardのドライバ
+<li>トラックパッドの設定を変更
+  <ol>
+    <li>「システム環境設定」→「アクセシビリティ」→「マウスとトラックパッド」→「トラックパッドオプション」から「ドラッグを有効にする」をチェック
+  </ol>
+<li>キーボードの設定を変更
+  <ol>
+    <li>「システム環境設定」→「キーボード」→「修飾キー」から「Caps Lockキー」を「Control」に変更
+    <li>「システム環境設定」→「キーボード」→「ショートカット」
+      <ol>
+        <li>「Spotlight」の項目から「Spotlight検索を表示」と「Finderの検索ウインドウを表示」のチェックをはずす
+        <li> 「入力ソース」の項目から「前の入力ソースを選択」を「⌘スペース」に、「入力メニューの次のソースを選択」を「オプション⌘スペース」に変更
+      </ol>
+  </ol>
+<li><a href="https://developer.apple.com/downloads/">Command Line Tools (macOS 10.14) for Xcode</a>をインストール（Xcode本体は不要）（ただしもしmacOS 10.14用のCommand Line Toolsが見つからない場合は、仕方ないのでまず「App Store」からXcodeをインストールして、Xcode経由でCommand Line Toolsを入れる）
+<li>SSHの設定
+  <ol>
+    <li>ssh-keygen -t rsa
+    <li>cat ~/.ssh/id_rsa.pub | ssh user_name@server_name 'cat >> .ssh/authorized_keys'
+  </ol>
+<li><a href="https://www.dropbox.com/ja/install?os=mac">Dropbox</a>をインストール
+<li>Dropboxを同期（パスワードを手入力するのは大変だからいったん他のマシンから「メモ」に書く）
+<li><a href="https://bitwarden.com/">Bitwarden</a>をインストール
+<li>bashの設定
+  <ol>
+    <li>ln -s ~/Dropbox/misc/dotfiles/profile ~/.profile
+    <li>ln -s ~/Dropbox/misc/dotfiles/bashrc ~/.bashrc
+    <li>ln -s ~/Dropbox/misc/dotfiles/bash_profile ~/.bash_profile
+  </ol>
+<li>gitをインストール
+  <ol>
+    <li>まずMacPortsをインストール
+      <ol>
+        <li><a href="https://www.macports.org/install.php">https://www.macports.org/</a>からMojave用のpkgをダウンロードしてインストール
+        <li>sudo port -d selfupdate
+      </ol>
+    <li>sudo port install git
+    <li>git config --global credential.helper osxkeychain（こうしておけば毎回パスワードを入力せずに済む）
+  </ol>
+<li>TeXをインストール
+  <ol>
+    <li><a href="https://tug.org/mactex/">MacTeX</a>をインストール。これによりTeXShopやLaTeXiTも自動的にインストールされる。
+    <li>MacTeXの設定
+      <ol>
+        <li>open /Applications/TeX/TeX\ Live\ Utility.app
+        <li>「TeX Live ユーティリティ」→「更新があるか確認」
+        <li>「作業」から「すべてのパッケージを更新」
+      </ol>
+    <li>ヒラギノフォントを使うための設定（ただしこの情報は2017年10月30日現在のもの。<a href="https://qiita.com/osamu620/items/8a299e44d087542e29a9">ここ</a>参照）
+      <ol>
+        <li>git clone https://github.com/texjporg/cjk-gs-support.git
+        <li>cd cjk-gs-support
+        <li>sudo ./cjk-gs-integrate.pl --link-texmf --fontdef-add=./cjkgs-macos-highsierra.dat
+        <li>sudo mktexlsr
+        <li>cd
+        <li>git clone https://github.com/texjporg/jfontmaps.git
+        <li>cd jfontmaps
+        <li>Makefileを編集
+          <ol>
+            <li>1行目を「TEXMF = /usr/local/texlive/texmf-local」と書き換える
+          </ol>
+        <li>sudo make install
+        <li>cd script
+        <li>sudo mktexlsr
+        <li>sudo ./kanji-config-updmap-sys.sh hiragino-highsierra-pron
+        <li>sudo mktexlsr
+      </ol>
+    <li>TeX Shopの設定
+      <ol>
+        <li>open /Applications/TeX/TeXShop.app
+        <li>「TeXShop」から「アップデートを確認」
+        <li>「TeXShop」→「環境設定」→「書類」で「設定プロファイル」を「upTeX (ptex2pdf)」にする
+      </ol>
+    <li>LaTeXiTの設定
+      <ol>
+        <li>open /Applications/TeX/LaTeXiT.app（これをDockに登録）
+        <li>フォントサイズやテンプレートなど
+      </ol>
+  </ol>
+<li>Emacsをインストール
+  <ol>
+    <li>sudo port install autoconf
+    <li>sudo port install automake
+    <li>Emacsをインストール（<a href="https://qiita.com/takaxp/items/e07bb286d80fa9dd8e05">takaxpさんの記事</a>参照）
+      <ol>
+        <li>mkdir ~/buildemacs
+        <li>cd ~/buildemacs
+        <li>EMACSVER=26.2
+        <li>curl -LO http://ftpmirror.gnu.org/emacs/emacs-$EMACSVER.tar.gz
+        <li>curl -LO https://gist.githubusercontent.com/takaxp/3314a153f6d02d82ef1833638d338ecf/raw/156aaa50dc028ebb731521abaf423e751fd080de/emacs-25.2-inline.patch
+        <li>tar zxvf emacs-$EMACSVER.tar.gz
+        <li>cd emacs-$EMACSVER
+        <li>patch -p1 < ../emacs-25.2-inline.patch
+	<li>./autogen.sh
+        <li>./configure --without-x --with-ns --with-modules
+        <li>make bootstrap -j1
+        <li>make install -j1
+        <li>mv nextstep/Emacs.app/ /Applications/
+        <li>open /Applications/Emacs.app（これをDockに登録）
+        <li>ln -s ~/Dropbox/misc/dotfiles/init.el ~/.emacs.d/.init.el
+        <li>ln -s ~/.emacs.d/.init.el ~/.emacs.el
+      </ol>
+  </ol>
+<li>そのほかのソフトウェアをインストール
+  <ol>
+    <li><a href="http://www.yatex.org">YaTeX</a>
+    <li><a href="http://skim-app.sourceforge.net/">Skim</a>
+      <ol>
+        <li>インストール後にターミナルで defaults write -app Skim SKAutoReloadFileUpdate -boolean true
+        <li>「Skim」→「環境設定」→「同期する」の「PDF-TeX 同期サポート」の「初期値」としてEmacsを選択
+      </ol>
+    <li>mac portsから
+      <ol>
+        <li>sudo port install fswatch（コマンド fswatch はスカイプ会議で Dropbox+Skim を使うときに活躍。<a href="./skim_and_dropbox.txt">詳細</a>）
+        <li>sudo port install qpdf（コマンド qpdf はPDFファイルの暗号化などに使う）
+      </ol>
+    <li><a href="https://www.zotero.org/">Zotero</a>
+      <ol>
+	<li>インストール後に「Zotero」→「Preferences」で
+	  <ol>
+	    <li>「General」では「File Handling」の項目から「Automatically take snapshots when creating items from web pages」と「Automatically attach associated PDFs and other files when saving items」のチェックをはずす
+	    <li>「Sync」では「Data Syncing」の「Sync automatically」のみをチェックし、残りの3つのチェックははずす
+	    <li>「Advanced」の「Data Directory Location」 は「Default」（/Users/nozomu/Zotero）のままでよい
+	  </ol>
+	<li><a href="http://zotfile.com/">ZotFile</a>をダウンロード
+	<li>Zoteroの「Tools」→「Add-ons」からZotFileをインストール
+	<li>Zoteroの「Tools」→「ZotFile Preferences」→「General Settings」の「Location of Files」欄で「Custom Location」を選択して「/Users/nozomu/Dropbox/Zotero」を「Choose」し、さらにその下の「Use subfolder defined by」の欄は「/%c」と書く
+      </ol>
+    <li><a href="http://www.skype.com/ja/">Skype</a>
+    <li>プリンタのドライバ
+    <li>App Storeから
+      <ol>
+        <li>OmniGraffle
+        <li>PopClip
+        <li>egword Universal 2
+      </ol>
+    <li><a href="https://www.mozilla.org/ja/firefox/">Firefox</a>
+      <ol>
+        <li>必要なら大学のサーバへトンネルを掘る
+      </ol>
+    <li>Mathematica
+    <li>Maple
+    <li>Office 365
+    <li><a href="http://gimp.lisanet.de/">gimp</a>
+    <li>もし必要ならAtomも
+      <ol>
+	<li><a href="https://atom.io">Atom</a>をダウンロードしてインストール
+	<li>「Atom」→「Preferences」→「Install」から次のパッケージをSearchしてインストール
+	  <ol>
+            <li>atomic-emacs
+            <li>language-latex
+            <li>latex
+	  </ol>
+	<li>「Atom」→「Preferences」→「Packages」→「latex」の「Settings」のボタンを押して
+	  <ol>
+            <li>「TeX Path」を/Library/TeX/texbin/に
+            <li>「Engine」をuplatexに
+            <li>「Opener」をskimに
+	  </ol>
+	<li>ショートカットキーを変更するため ~/.atom/packages/latex/keymaps/latex.json を書き換える。<a href="http://xartaky.hatenablog.jp/entry/2017-09-21-atom-lualatex#Atom-の-latex-パッケージのショートカットを変更する">ここ</a>参照。
+	  <ol>
+            <li>「"ctrl-alt-b": "latex:build"」を「"cmd-i": "latex:build"」に。これで⌘-iでコンパイルできる。
+            <li>「"ctrl-alt-s": "latex:sync"」を「"cmd-g": "latex:sync"」に。これで⌘-gでPDFファイルの対応箇所に飛べる。
+	  </ol>
+      </ol>
+  </ol>
+<li>「システム環境設定」→「一般」→「書類を閉じるときに変更内容を保持するかどうかを確認」をオンにする。（こうしておけば、プレビューでPDFファイルを開いたときに不用意にクリックしただけで編集済みになり閉じたときに編集済みバージョンが上書き保存されてしまう、というよくある現象が避けられる）
+<li>「システム環境設定」→「キーボード」→「ショートカット」→「アプリケーション」から「+」をクリックし、「メニュータイトル」に「ペーストしてスタイルを合わせる」と入力し「キーボードショートカット」に「⌘V」と入力する。（こうしておけば、⌘Vでペーストするときにコピー元のスタイルを引き継ぐことなくいつでも書式なしでペーストすることができる）
+</ol>
+</body>
+</html>
