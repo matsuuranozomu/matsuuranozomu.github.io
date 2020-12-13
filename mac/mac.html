@@ -8,12 +8,12 @@
 <body>
 Mac（Intel版）を買ったらすること（OSのバージョンはBig Surを想定）
 <ol>
+<li>ソフトウェアアップデート
+<li>Time Machineでバックアップをとる
 <li>FileVaultを切にする
   <ol>
     <li>「システム環境設定」→「セキュリティとプライバシー」→「FileVault」→「FileVaultを切にする」
   </ol>
-<li>ソフトウェアアップデート
-<li>Time Machineでバックアップをとる
 <li>トラックパッドの設定を変更
   <ol>
     <li>「システム環境設定」→「アクセシビリティ」→「マウスとトラックパッド」→「トラックパッドオプション」から「ドラッグを有効にする」をチェック
@@ -68,7 +68,6 @@ Mac（Intel版）を買ったらすること（OSのバージョンはBig Surを
       <ol>
         <li>mkdir ~/buildemacs
         <li>cd ~/buildemacs
-        <li>EMACSVER=27.1
 	<li>MACSDK=`xcrun --show-sdk-path`
 	<li>export LIBXML2_CFLAGS="-I${MACSDK}/usr/include/libxml2"
 	<li>export LIBXML2_LIBS="-lxml2"
