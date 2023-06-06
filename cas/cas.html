@@ -57,6 +57,12 @@ Mathematicaの覚え書き
 入力 Apply[f,{a,b,c}]
 出力 f[a,b,c]
 
+入力 Thread[List[x,{a,b,c}]]
+出力 {{x,a},{x,b},{x,c}}
+
+入力 Thread[List[{a,b,c},x]]
+出力 {{a,x},{b,x},{c,x}}
+
 入力 MapThread[List,{{a,b,c},{x,y,z}}]
 出力 {{a,x},{b,y},{c,z}}
 
