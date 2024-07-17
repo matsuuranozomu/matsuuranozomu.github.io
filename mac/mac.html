@@ -95,6 +95,14 @@ Macを買ったらすること
 <li>TeXをインストール
   <ol>
     <li><a href="https://tug.org/mactex/">MacTeX</a>をインストール。これによりTeXShop（は使わないけど）とTeX Live UtilityとLaTeXiTも自動的にインストールされる。
+    <li>フォントの登録
+      <ol>
+	<li>sudo mkdir -p /usr/local/texlive/texmf-local/fonts/opentype/apple
+	<li>cd /usr/local/texlive/texmf-local/fonts/opentype/apple
+	<li>sudo find /System/Library/AssetsV2/com_apple_MobileAsset_Font7 -name "*.otf" -o -name "*.ttc" -exec sh -xc 'ln -s "{}" "`basename "{}"`"' \;
+	<li>sudo mktexlsr /usr/local/texlive/texmf-local
+	<li>luaotfload-tool -f -u -vvvvv
+      </ol>
     <li>TeX Live Utilityの設定
       <ol>
         <li>open /Applications/TeX/TeX\ Live\ Utility.app
@@ -112,8 +120,8 @@ Macを買ったらすること
     <li>プリンタのドライバ
     <li><a href="http://skim-app.sourceforge.net/">Skim</a>
       <ol>
-        <li>インストール後にターミナルで defaults write -app Skim SKAutoReloadFileUpdate -boolean true
-        <li>「Skim」→「環境設定」→「同期する」の「PDF-TeX 同期サポート」の「初期値」としてEmacsを選択
+        <li>「Skim」→「環境設定」→「同期」の「ファイルの変更をチェック」と「自動的にリロードする」をチェック
+        <li>「Skim」→「環境設定」→「同期」の「PDF-TeX 同期サポート」の「初期値」としてEmacsを選択
       </ol>
     <li>Mathematica
     <li>Maple
