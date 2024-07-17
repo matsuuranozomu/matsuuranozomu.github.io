@@ -6,7 +6,7 @@
 <title>Macを買ったらすること/松浦望</title>
 </head>
 <body>
-Mac（Intel版）を買ったらすること（OSのバージョンはBig Surを想定）
+Macを買ったらすること
 <ol>
 <li>ソフトウェアアップデート
 <li>Time Machineでバックアップをとる
@@ -32,10 +32,10 @@ Mac（Intel版）を買ったらすること（OSのバージョンはBig Surを
     <li>「メニュータイトル」に「ペーストしてスタイルを合わせる」と入力し「キーボードショートカット」に「⌘V」と入力する。こうしておけば、⌘Vでペーストするときにコピー元のスタイルを引き継ぐことなくいつでも書式なしでペーストすることができる。
     <li>「メニュータイトル」に「絵文字と記号」と入力し「キーボードショートカット」に普段使わなそうな組み合わせ、例えば「オプション⌘`」と入力する。こうしておけば、うっかり「コントロール⌘スペース」で絵文字を呼び出してしまうことがなくなる。
   </ol>
-<li>「システム環境設定」→「一般」→「書類を閉じるときに変更内容を保持するかどうかを確認」をオンにする。こうしておけば、プレビューでPDFファイルを開いたときに不用意にクリックしただけで編集済みになり閉じたときに編集済みバージョンが上書き保存されてしまう、というよくある現象が避けられる。
+<li>「システム環境設定」→「デスクトップとDock」→「書類を閉じるときに変更内容を保持するかどうかを確認」をオンにする。こうしておけば、プレビューでPDFファイルを開いたときに不用意にクリックしただけで編集済みになり閉じたときに編集済みバージョンが上書き保存されてしまう、というよくある現象が避けられる。
 <li>「システム環境設定」→「ディスプレイ」→「Night Shift」で時間帯を設定
-<li>「システム環境設定」→「Dockとメニューバー」→「時計」→「24時間表示にする」と「秒を表示」をチェック
-<li>「Finder」→「環境設定」→「詳細」→「すべてのファイル名拡張子を表示」をチェック
+<li>「システム環境設定」→「コントロールセンター」→「時計」→「秒を表示」をオン
+<li>「Finder」→「設定」→「詳細」→「すべてのファイル名拡張子を表示」をチェック
 <li>Command Line Tools for Xcode</a>をインストール（Xcode本体は不要）
   <ol>
     <li>xcode-select --install
@@ -46,8 +46,8 @@ Mac（Intel版）を買ったらすること（OSのバージョンはBig Surを
     <li>cat ~/.ssh/id_rsa.pub | ssh user_name@server_name 'cat >> .ssh/authorized_keys'
   </ol>
 <li><a href="https://www.dropbox.com/ja/install?os=mac">Dropbox</a>をインストール
-<li>「システム設定」→「プライバシーとセキュリティ」→「フルディスクアクセス」→「Dropbox」をチェック
-<li>Dropboxを同期（パスワードを手入力するのは大変だからいったん他のマシンから「メモ」に書く）
+<li>「システム設定」→「プライバシーとセキュリティ」→「アクセシビリティ」→「Dropbox」をオン
+<li>Dropboxを同期
 <li>App StoreからBitwardenをインストール
 <li>zshの設定
   <ol>
@@ -80,12 +80,10 @@ Mac（Intel版）を買ったらすること（OSのバージョンはBig Surを
 	<li>git clone git://git.sv.gnu.org/emacs.git
 	<li>git clone --depth 1 https://github.com/takaxp/ns-inline-patch.git
 	<li>cd emacs
-	<li>git checkout --track origin/emacs-27
-	<li>patch -p1 < ../ns-inline-patch/emacs-27.1-inline.patch
-	<li>patch -p1 < ../ns-inline-patch/revert-89d0c445.patch
-	<li>patch -p1 < ../$PATCH/ns-inline-patch/fix-working-text.patch
+	<li>git checkout --track origin/emacs-29
+	<li>patch -p1 < ../ns-inline-patch/emacs-29.1-inline.patch
 	<li>./autogen.sh
-	<li>./configure CC=clang --without-x --with-ns --with-modules
+	<li>./configure CC=clang --without-x --with-ns --with-modules --with-gnutls=ifavailable
 	<li>CORES=
 	<li>make bootstrap -j$CORES
 	<li>make install -j$CORES
